@@ -103,8 +103,8 @@ console.table(marketplace_filtered);
 // 🎯 TODO: Average Basket
 // 1. Determine the average basket of the marketplace
 // 2. Log the average
-
-
+var average_basket = (marketplace.reduce((previousValue, product) => previousValue + product.price, 0))/n_products;
+console.log(average_basket);
 
 
 
