@@ -147,7 +147,8 @@ console.log(Object.keys(brands).length)
 // 🎯 TODO: Sort by price for each brand
 // 1. For each brand, sort the products by price, from highest to lowest
 // 2. Log the sort
-
+Object.keys(brands).forEach(brand => {sort_by_price(brands[brand]);});
+console.table(brands);
 
 // 🎯 TODO: Sort by date for each brand
 // 1. For each brand, sort the products by date, from old to recent
