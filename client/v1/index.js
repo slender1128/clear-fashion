@@ -153,7 +153,8 @@ console.table(brands);
 // 🎯 TODO: Sort by date for each brand
 // 1. For each brand, sort the products by date, from old to recent
 // 2. Log the sort
-
+Object.keys(brands).forEach(brand => {sort_by_date(brands[brand]);});
+console.table(brands);
 
 
 
