@@ -256,7 +256,11 @@ console.log(new_product);
 // 🎯 TODO: Reasonable price
 // // 1. Log if coteleparis is a reasonable price shop (true or false)
 // // A reasonable price if all the products are less than 100€
-
+var reasonable = true;
+COTELE_PARIS.forEach(product => {
+	if (product.price >= 100) {reasonable = false;}
+});
+console.log(reasonable);
 
 // 🎯 TODO: Find a specific product
 // 1. Find the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
