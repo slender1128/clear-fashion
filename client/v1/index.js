@@ -49,7 +49,8 @@ console.log(cheapest_tshirt);
 // 🎯 TODO: Number of products
 // 1. Create a variable and assign it the number of products
 // 2. Log the variable
-
+var n_products = Object.keys(marketplace).length;
+console.log(n_products);
 
 // 🎯 TODO: Brands name
 // 1. Create a variable and assign it the list of brands name only
