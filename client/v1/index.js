@@ -169,7 +169,7 @@ console.table(brands);
 // 🎯 TODO: Compute the p90 price value
 // 1. Compute the p90 price value of each brand
 // The p90 value (90th percentile) is the lower value expected to be exceeded in 90% of the products
-
+console.log(sort_by_price(marketplace)[Math.ceil(n_products*0.90)].price);
 
 
 
