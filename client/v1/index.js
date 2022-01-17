@@ -31,7 +31,8 @@ console.log(MY_FAVORITE_BRANDS[0]);
 // 1. Create a new variable and assign it the link of the cheapest t-shirt
 // I can find on these e-shops
 // 2. Log the variable
-
+var cheapest_tshirt = 'https://www.loom.fr/products/le-t-shirt';
+console.log(cheapest_tshirt);
 
 
 
