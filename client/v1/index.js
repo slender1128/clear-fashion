@@ -130,7 +130,19 @@ console.log(average_basket);
 //
 // 2. Log the variable
 // 3. Log the number of products by brands
+var brands = {};
+brands_list.forEach(brand => {
+	brands[brand] = [];
+	marketplace.forEach(product => {
+		if (product.brand == brand)
+		{
+			brands[brand].push(product);
+		}
+	});
+});
 
+console.table(brands);
+console.log(Object.keys(brands).length)
 
 // 🎯 TODO: Sort by price for each brand
 // 1. For each brand, sort the products by price, from highest to lowest
