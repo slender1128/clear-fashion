@@ -265,7 +265,9 @@ console.log(reasonable);
 // 🎯 TODO: Find a specific product
 // 1. Find the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
 // 2. Log the product
-
+COTELE_PARIS.forEach(product => {
+	if (product.uuid == 'b56c6d88-749a-5b4c-b571-e5b5c6483131') {console.log(product);}
+});
 
 // 🎯 TODO: Delete a specific product
 // 1. Delete the product with the uuid `b56c6d88-749a-5b4c-b571-e5b5c6483131`
