@@ -1,9 +1,6 @@
 // Invoking strict mode https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Strict_mode#invoking_strict_mode
 'use strict';
 
-// number of products
-let productsCount = 0;
-
 // all products
 let products = [];
 
@@ -16,11 +13,13 @@ let currentPagination = {};
 let currentBrandIndex = 0;
 let recentlyReleased = false;
 let reasonablePrice = false;
+let currentSort = 0;
 
 // initiate selectors
 const selectShow = document.querySelector('#show-select');
 const selectPage = document.querySelector('#page-select');
 const selectBrand = document.querySelector('#brand-select');
+const selectSort = document.querySelector('#sort-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
 const checkReleased = document.querySelector('#released-check');
@@ -55,6 +54,37 @@ const setCurrentProducts = (size) => {
 			return product.brand == brands[currentBrandIndex];
 		});
 	}
+	
+	switch (currentSort) {
+		case 0: //price-asc
+			temp.sort((product1, product2) => {
+				return product1.price-product2.price;
+			});
+			break;
+		
+		case 1: //price-desc
+			temp.sort((product1, product2) => {
+				return product2.price-product1.price;
+			});
+			break;
+			
+		case 2: //date-asc
+			temp.sort((product1, product2) => {
+				const date1 = new Date(product1.released);
+				const date2 = new Date(product2.released);
+				return date2-date1;
+			});
+			break;
+		
+		case 3: //date-desc
+			temp.sort((product1, product2) => {
+				const date1 = new Date(product1.released);
+				const date2 = new Date(product2.released);
+				return date1-date2;
+			});
+			break;
+	}
+	
 	currentPagination.pageCount = Math.ceil(temp.length/currentPagination.pageSize);
 	currentProducts = temp.slice((page-1)*size, page*size);;
 };
@@ -108,6 +138,7 @@ const renderProducts = products => {
         <span>${product.brand}</span>
         <a href="${product.link}">${product.name}</a>
         <span>${product.price}</span>
+		<span>${product.released}</span>
       </div>
     `;
     })
@@ -139,9 +170,7 @@ const renderPagination = pagination => {
  * @param  {Object} pagination
  */
 const renderIndicators = pagination => {
-  const {productsCount} = pagination;
-
-  spanNbProducts.innerHTML = productsCount;
+	spanNbProducts.innerHTML = products.length;
 };
 
 /**
@@ -223,7 +252,19 @@ checkPrice.addEventListener('change', event => {
     render(currentProducts, currentPagination);
 });
 
+/**
+ * Select the sorting method
+ * @type {[type]}
+ */
+selectSort.addEventListener('change', event => {
+	currentSort = event.target.selectedIndex;
+	currentPagination.currentPage = 1;
+	setCurrentProducts(currentPagination.pageSize);
+    render(currentProducts, currentPagination);
+});
+
 document.addEventListener('DOMContentLoaded', () => {
+	let productsCount;
 	fetchProducts()
 		.then(({result, meta}) => {productsCount = meta.count;})
 		.then(() => {
