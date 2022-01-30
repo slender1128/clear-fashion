@@ -372,7 +372,7 @@ const favEventListener = (ev) => {
 		favoriteProducts.push(ev.target.id.split('-').splice(1).join('-'));
 	}
 	else {
-		favoriteProducts.remove(favoriteProducts.indexOf(ev.target.id.split('-').splice(1).join('-')));
+		favoriteProducts.splice(favoriteProducts.indexOf(ev.target.id.split('-').splice(1).join('-')), 1);
 	}
 	localStorage.setItem('favoriteProducts', JSON.stringify(favoriteProducts));
 	render(currentProducts, currentPagination);
