@@ -162,21 +162,38 @@ const fetchProducts = async (size = 12) => {
 const renderProducts = products => {
 	const fragment = document.createDocumentFragment();
 	const div = document.createElement('div');
-	let template = '';
+	let template = `
+	<table>
+		<thead>
+			<tr>
+				<th>Picture</th>
+				<th>Name</th>
+				<th>Brand</th>
+				<th>Price</th>
+				<th>Release date</th>
+				<th>Favorite</th>
+			</tr>
+		</thead>
+		<tbody>`;
 	products.map(product => {
 		let fav = '';
 		if (favoriteProducts.includes(product.uuid)) {
 			fav = 'checked';
 		}
 		template += `
-		<div class="product" id="${product.uuid}">
-			<span>${product.brand}</span>
-			<a href="${product.link}" target="_blank">${product.name}</a>
-			<span>${product.price}</span>
-			<span>${product.released}</span>
-			<input type="checkbox" id="check-${product.uuid}" ${fav}>
-		</div>`;
+		<tr>
+			<td><img src="${product.photo}" width="150"></td>
+			<td><a href="${product.link}" target="_blank">${product.name}</a></td>
+			<td>${product.brand}</td>
+			<td>${product.price}€</td>
+			<td>${product.released}</td>
+			<td><input type="checkbox" id="check-${product.uuid}" ${fav}></td>
+		</tr>`;
     });
+	
+	template += `
+		</tbody>
+	</table>`;
 
 	div.innerHTML = template;
 	fragment.appendChild(div);
@@ -263,17 +280,33 @@ const renderBrands = (currentBrandIndex) => {
  const renderFavorites = () => {
 	const fragment = document.createDocumentFragment();
 	const div = document.createElement('div');
-	let template = '';
+	let template = `
+	<table>
+		<thead>
+			<tr>
+				<th>Picture</th>
+				<th>Name</th>
+				<th>Brand</th>
+				<th>Price</th>
+				<th>Release date</th>
+			</tr>
+		</thead>
+		<tbody>`;
 	favoriteProducts.map(uuid => {
 		const product = products.filter(p => {return p.uuid == uuid;})[0];
 		template += `
-		<div class="product" id="${product.uuid}">
-			<span>${product.brand}</span>
-			<a href="${product.link}" target="_blank">${product.name}</a>
-			<span>${product.price}</span>
-			<span>${product.released}</span>
-		</div>`;
+		<tr>
+			<td><img src="${product.photo}" width="150"></td>
+			<td><a href="${product.link}" target="_blank">${product.name}</a></td>
+			<td>${product.brand}</td>
+			<td>${product.price}€</td>
+			<td>${product.released}</td>
+		</tr>`;
     });
+
+	template += `
+		</tbody>
+	</table>`;
 
 	div.innerHTML = template;
 	fragment.appendChild(div);
@@ -375,6 +408,7 @@ const favEventListener = (ev) => {
 		favoriteProducts.splice(favoriteProducts.indexOf(ev.target.id.split('-').splice(1).join('-')), 1);
 	}
 	localStorage.setItem('favoriteProducts', JSON.stringify(favoriteProducts));
+	setCurrentProducts(currentPagination.pageSize);
 	render(currentProducts, currentPagination);
 };
 
