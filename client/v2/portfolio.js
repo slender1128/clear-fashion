@@ -247,9 +247,9 @@ const renderIndicators = pagination => {
 	temp.sort((product1, product2) => {
 		return product1.price-product2.price;
 	});
-	spanP50.innerHTML = temp[Math.ceil(temp.length*0.50)].price;
-	spanP90.innerHTML = temp[Math.ceil(temp.length*0.90)].price;
-	spanP95.innerHTML = temp[Math.ceil(temp.length*0.95)].price;
+	spanP50.innerHTML = String(temp[Math.ceil(temp.length*0.50)].price) + '€';
+	spanP90.innerHTML = String(temp[Math.ceil(temp.length*0.90)].price) + '€';
+	spanP95.innerHTML = String(temp[Math.ceil(temp.length*0.95)].price) + '€';
 	
 	temp.sort((product1, product2) => {
 		const date1 = new Date(product1.released);
