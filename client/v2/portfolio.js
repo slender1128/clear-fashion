@@ -23,6 +23,10 @@ const selectSort = document.querySelector('#sort-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
 const spanNbNewProducts = document.querySelector('#nbNewProducts');
+const spanP50 = document.querySelector('#p50');
+const spanP90 = document.querySelector('#p90');
+const spanP95 = document.querySelector('#p95');
+const spanLastReleased = document.querySelector('#lastReleased');
 const checkReleased = document.querySelector('#released-check');
 const checkPrice = document.querySelector('#price-check');
 
@@ -167,17 +171,35 @@ const renderPagination = pagination => {
 };
 
 /**
- * Render page selector
+ * Render indicators
  * @param  {Object} pagination
  */
 const renderIndicators = pagination => {
+	let temp;
+	
 	spanNbProducts.innerHTML = products.length;
-	const temp = products.filter(product => {
+	
+	temp = products.filter(product => {
 		const rel = new Date(product.released);
 		const today = new Date();
 		return (today - rel)/(1000*60*60*24) < 14.0;
 	});
 	spanNbNewProducts.innerHTML = temp.length;
+	
+	temp = products;
+	temp.sort((product1, product2) => {
+		return product1.price-product2.price;
+	});
+	spanP50.innerHTML = temp[Math.ceil(temp.length*0.50)].price;
+	spanP90.innerHTML = temp[Math.ceil(temp.length*0.90)].price;
+	spanP95.innerHTML = temp[Math.ceil(temp.length*0.95)].price;
+	
+	temp.sort((product1, product2) => {
+		const date1 = new Date(product1.released);
+		const date2 = new Date(product2.released);
+		return date2-date1;
+	});
+	spanLastReleased.innerHTML = temp[0].released;
 };
 
 /**
@@ -194,11 +216,16 @@ const renderBrands = (currentBrandIndex) => {
 	selectBrand.selectedIndex = currentBrandIndex;
 };
 
+/**
+ * General rendering function
+ * @param  {Object} products
+ * @param  {Object} pagination
+ */
 const render = (products, pagination) => {
-  renderProducts(products);
-  renderPagination(pagination);
-  renderIndicators(pagination);
-  renderBrands(currentBrandIndex);
+	renderProducts(products);
+	renderPagination(pagination);
+	renderIndicators(pagination);
+	renderBrands(currentBrandIndex);
 };
 
 /**
