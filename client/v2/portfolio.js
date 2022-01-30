@@ -22,6 +22,7 @@ const selectBrand = document.querySelector('#brand-select');
 const selectSort = document.querySelector('#sort-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
+const spanNbNewProducts = document.querySelector('#nbNewProducts');
 const checkReleased = document.querySelector('#released-check');
 const checkPrice = document.querySelector('#price-check');
 
@@ -171,6 +172,12 @@ const renderPagination = pagination => {
  */
 const renderIndicators = pagination => {
 	spanNbProducts.innerHTML = products.length;
+	const temp = products.filter(product => {
+		const rel = new Date(product.released);
+		const today = new Date();
+		return (today - rel)/(1000*60*60*24) < 14.0;
+	});
+	spanNbNewProducts.innerHTML = temp.length;
 };
 
 /**
