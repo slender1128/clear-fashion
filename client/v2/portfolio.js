@@ -7,6 +7,16 @@ let products = [];
 // all brands
 let brands = [];
 
+// favorites
+let favoriteSelectors = [];
+let favoriteProducts;
+if (localStorage.getItem('favoriteProducts') == null) {
+	favoriteProducts = [];
+}
+else {
+	favoriteProducts = JSON.parse(localStorage.getItem('favoriteProducts'));
+}
+
 // current products on the page
 let currentProducts = [];
 let currentPagination = {};
@@ -21,6 +31,7 @@ const selectPage = document.querySelector('#page-select');
 const selectBrand = document.querySelector('#brand-select');
 const selectSort = document.querySelector('#sort-select');
 const sectionProducts = document.querySelector('#products');
+const sectionFavorites = document.querySelector('#favorites');
 const spanNbProducts = document.querySelector('#nbProducts');
 const spanNbNewProducts = document.querySelector('#nbNewProducts');
 const spanP50 = document.querySelector('#p50');
@@ -88,6 +99,21 @@ const setCurrentProducts = (size) => {
 				return date1-date2;
 			});
 			break;
+			
+		case 4: //fav
+			temp.sort((product1, product2) => {
+				if ((favoriteProducts.includes(product1.uuid) && favoriteProducts.includes(product2.uuid))
+					|| !(favoriteProducts.includes(product1.uuid) || favoriteProducts.includes(product2.uuid))) {
+					return 0;
+				}
+				else if (favoriteProducts.includes(product1.uuid)) {
+					return -1;
+				}
+				else {
+					return 1;
+				}
+			});
+			break;
 	}
 	
 	currentPagination.pageCount = Math.ceil(temp.length/currentPagination.pageSize);
@@ -134,25 +160,39 @@ const fetchProducts = async (size = 12) => {
  * @param  {Array} products
  */
 const renderProducts = products => {
-  const fragment = document.createDocumentFragment();
-  const div = document.createElement('div');
-  const template = products
-    .map(product => {
-      return `
-      <div class="product" id=${product.uuid}>
-        <span>${product.brand}</span>
-        <a href="${product.link}" target="_blank">${product.name}</a>
-        <span>${product.price}</span>
-		<span>${product.released}</span>
-      </div>
-    `;
-    })
-    .join('');
+	const fragment = document.createDocumentFragment();
+	const div = document.createElement('div');
+	let template = '';
+	products.map(product => {
+		let fav = '';
+		if (favoriteProducts.includes(product.uuid)) {
+			fav = 'checked';
+		}
+		template += `
+		<div class="product" id="${product.uuid}">
+			<span>${product.brand}</span>
+			<a href="${product.link}" target="_blank">${product.name}</a>
+			<span>${product.price}</span>
+			<span>${product.released}</span>
+			<input type="checkbox" id="check-${product.uuid}" ${fav}>
+		</div>`;
+    });
 
-  div.innerHTML = template;
-  fragment.appendChild(div);
-  sectionProducts.innerHTML = '<h2>Products</h2>';
-  sectionProducts.appendChild(fragment);
+	div.innerHTML = template;
+	fragment.appendChild(div);
+	sectionProducts.innerHTML = '<h2>Products</h2>';
+	sectionProducts.appendChild(fragment);
+	
+	favoriteSelectors.forEach(selector => {
+		selector.removeEventListener('change', favEventListener);
+		selector.parentElement.removeChild(selector);
+	});
+	favoriteSelectors = [];
+	products.map(product => {
+		const selector = document.querySelector(`#check-${product.uuid}`);
+		selector.addEventListener('change', favEventListener);
+		favoriteSelectors.push(selector);
+	});
 };
 
 /**
@@ -217,6 +257,31 @@ const renderBrands = (currentBrandIndex) => {
 };
 
 /**
+ * Render favorite products
+ * 
+ */
+ const renderFavorites = () => {
+	const fragment = document.createDocumentFragment();
+	const div = document.createElement('div');
+	let template = '';
+	favoriteProducts.map(uuid => {
+		const product = products.filter(p => {return p.uuid == uuid;})[0];
+		template += `
+		<div class="product" id="${product.uuid}">
+			<span>${product.brand}</span>
+			<a href="${product.link}" target="_blank">${product.name}</a>
+			<span>${product.price}</span>
+			<span>${product.released}</span>
+		</div>`;
+    });
+
+	div.innerHTML = template;
+	fragment.appendChild(div);
+	sectionFavorites.innerHTML = '<h2>Favorite Products</h2>';
+	sectionFavorites.appendChild(fragment); 
+ };
+
+/**
  * General rendering function
  * @param  {Object} products
  * @param  {Object} pagination
@@ -226,6 +291,7 @@ const render = (products, pagination) => {
 	renderPagination(pagination);
 	renderIndicators(pagination);
 	renderBrands(currentBrandIndex);
+	renderFavorites();
 };
 
 /**
@@ -297,6 +363,25 @@ selectSort.addEventListener('change', event => {
     render(currentProducts, currentPagination);
 });
 
+/**
+ * Favorite event listener function
+ * @type {Object}
+ */
+const favEventListener = (ev) => {
+	if (ev.target.checked) {
+		favoriteProducts.push(ev.target.id.split('-').splice(1).join('-'));
+	}
+	else {
+		favoriteProducts.remove(favoriteProducts.indexOf(ev.target.id.split('-').splice(1).join('-')));
+	}
+	localStorage.setItem('favoriteProducts', JSON.stringify(favoriteProducts));
+	render(currentProducts, currentPagination);
+};
+
+/**
+ * On first load
+ * @type {[type]}
+ */
 document.addEventListener('DOMContentLoaded', () => {
 	let productsCount;
 	fetchProducts()
