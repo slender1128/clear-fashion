@@ -15,6 +15,7 @@ let currentProducts = [];
 let currentPagination = {};
 let currentBrandIndex = 0;
 let recentlyReleased = false;
+let reasonablePrice = false;
 
 // initiate selectors
 const selectShow = document.querySelector('#show-select');
@@ -32,17 +33,21 @@ const checkPrice = document.querySelector('#price-check');
 const setCurrentProducts = (size) => {
 	const page = currentPagination.currentPage;
 	let temp;
-	if (recentlyReleased)
-	{
+	if (recentlyReleased) {
 		temp = products.filter(product => {
 			const rel = new Date(product.released);
 			const today = new Date();
 			return (today - rel)/(1000*60*60*24) < 14.0;
 		});
 	}
-	else
-	{
+	else {
 		temp = products;
+	}
+	
+	if (reasonablePrice) {
+		temp = temp.filter(product => {
+			return product.price < 50;
+		});
 	}
 	
 	if (currentBrandIndex != 0) {
@@ -202,6 +207,17 @@ selectBrand.addEventListener('change', event => {
  */
 checkReleased.addEventListener('change', event => {
 	recentlyReleased = event.target.checked;
+	currentPagination.currentPage = 1;
+	setCurrentProducts(currentPagination.pageSize);
+    render(currentProducts, currentPagination);
+});
+
+/**
+ * Filter by reasonable price (less than 50€)
+ * @type {[type]}
+ */
+checkPrice.addEventListener('change', event => {
+	reasonablePrice = event.target.checked;
 	currentPagination.currentPage = 1;
 	setCurrentProducts(currentPagination.pageSize);
     render(currentProducts, currentPagination);
