@@ -9,11 +9,12 @@ let products = [];
 
 // all brands
 let brands = [];
-let currentBrandIndex = 0;
 
 // current products on the page
 let currentProducts = [];
 let currentPagination = {};
+let currentBrandIndex = 0;
+let recentlyReleased = false;
 
 // initiate selectors
 const selectShow = document.querySelector('#show-select');
@@ -21,6 +22,8 @@ const selectPage = document.querySelector('#page-select');
 const selectBrand = document.querySelector('#brand-select');
 const sectionProducts = document.querySelector('#products');
 const spanNbProducts = document.querySelector('#nbProducts');
+const checkReleased = document.querySelector('#released-check');
+const checkPrice = document.querySelector('#price-check');
 
 /**
  * Set global value
@@ -29,11 +32,21 @@ const spanNbProducts = document.querySelector('#nbProducts');
 const setCurrentProducts = (size) => {
 	const page = currentPagination.currentPage;
 	let temp;
-	if (currentBrandIndex == 0) {
+	if (recentlyReleased)
+	{
+		temp = products.filter(product => {
+			const rel = new Date(product.released);
+			const today = new Date();
+			return (today - rel)/(1000*60*60*24) < 14.0;
+		});
+	}
+	else
+	{
 		temp = products;
 	}
-	else {
-		temp = products.filter(product => {
+	
+	if (currentBrandIndex != 0) {
+		temp = temp.filter(product => {
 			return product.brand == brands[currentBrandIndex];
 		});
 	}
@@ -179,6 +192,17 @@ selectPage.addEventListener('change', event => {
 selectBrand.addEventListener('change', event => {
 	currentPagination.currentPage = 1;
 	currentBrandIndex = event.target.selectedIndex;
+	setCurrentProducts(currentPagination.pageSize);
+    render(currentProducts, currentPagination);
+});
+
+/**
+ * Filter by recently released (less than 2 weeks)
+ * @type {[type]}
+ */
+checkReleased.addEventListener('change', event => {
+	recentlyReleased = event.target.checked;
+	currentPagination.currentPage = 1;
 	setCurrentProducts(currentPagination.pageSize);
     render(currentProducts, currentPagination);
 });
