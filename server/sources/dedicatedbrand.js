@@ -16,13 +16,21 @@ const parse = data => {
         .text()
         .trim()
         .replace(/\s/g, ' ');
-      const price = parseInt(
+      const brand = 'dedicated';
+      const price = parseFloat(
         $(element)
           .find('.productList-price')
           .text()
       );
+      const url = 'https://www.dedicatedbrand.com' + $(element)
+        .find('.productList-link')
+        .attr('href');
+      const image = $(element)
+        .find('.productList-image')
+        .find('img')
+        .attr('data-src');
 
-      return {name, price};
+      return {name, brand, price, image, url};
     })
     .get();
 };
