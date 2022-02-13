@@ -57,16 +57,9 @@ async function sandbox () {
       }
     }
     
-    const jsonStr = JSON.stringify(all_products);
+    const jsonStr = JSON.stringify(all_products, null, 2);
 
-    fs.writeFile('all_products.json', jsonStr, (err) => {
-      if (err) {
-        console.log("An error occured while writing JSON Object to File.");
-        return console.log(err);
-      }
-
-      console.log('JSON file has been saved.');
-    });
+    fs.writeFileSync('all_products.json', jsonStr);
     
     process.exit(0);
   } catch (e) {
