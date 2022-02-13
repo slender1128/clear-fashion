@@ -2,6 +2,7 @@
 const dedicatedbrand = require('./sources/dedicatedbrand');
 const montlimart = require('./sources/montlimart');
 const adresse = require('./sources/adresse');
+const fs = require('fs');
 
 let all_products = [];
 
@@ -21,21 +22,51 @@ async function sandbox () {
     {
       let page = 1;
       let products = [];
+      const actual_all_products_length = all_products.length;
       let done = false;
 
       do
       {
         console.log(`🕵️‍♀️  browsing ${url+`?p=${page}`} source`);
         products = await all_packages[url].scrape(url+`?p=${page}`);
-        console.log('done');
-        if ((products.length != 0) && ((all_products.length == 0) || ((products[products.length-1].name != all_products[all_products.length-1].name) && (products[0].name != all_products[0].name)))) products.forEach(product => all_products.push(product));
-        else done = true;
-        page++;
+        if (products == null)
+        {
+          console.log('error');
+        }
+        else
+        {
+          console.log('done');
+          if ((products.length != 0) && 
+          ((all_products.length == 0) || 
+          ((products[products.length-1].name != all_products[all_products.length-1].name) && 
+          (all_products.length <= actual_all_products_length+1 || products[1].name != all_products[actual_all_products_length+1].name)))) 
+            products.forEach(product => all_products.push(product));
+          else done = true;
+          page++;
+        }
       }
       while /*(page < 2)*/(!done);
     }
+
+    for (let i = 0; i<all_products.length; i++)
+    {
+      if (all_products[i].name == undefined)
+      {
+        all_products.splice(i, 1);
+        i--;
+      }
+    }
     
-    console.log(all_products);
+    const jsonStr = JSON.stringify(all_products);
+
+    fs.writeFile('all_products.json', jsonStr, (err) => {
+      if (err) {
+        console.log("An error occured while writing JSON Object to File.");
+        return console.log(err);
+      }
+
+      console.log('JSON file has been saved.');
+    });
     
     process.exit(0);
   } catch (e) {
