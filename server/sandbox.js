@@ -1,23 +1,39 @@
 /* eslint-disable no-console, no-process-exit */
 const dedicatedbrand = require('./sources/dedicatedbrand');
+const montlimart = require('./sources/montlimart');
+//const adresse= require('./source/adressebrand');
 
 async function sandbox () {
   try {
     let all_products = [];
     const dedicatedbrand_url = 'https://www.dedicatedbrand.com/en/men/all-men';
+    const montlimart_url = 'https://www.montlimart.com/toute-la-collection.html';
+    const adresse_url = 'https://adresse.paris/630-toute-la-collection';
+    all_url = [dedicatedbrand_url, montlimart_url];
+    //all_url = [dedicatedbrand_url, montlimart_url, adresse_url];
+    let all_packages = {};
+    all_packages[dedicatedbrand_url] = dedicatedbrand;
+    all_packages[montlimart_url] = montlimart;
+    //all_packages[adresse_url] = adresse;
 
-    let page = 1;
-    let products = [];
-
-    do
+    for (const url of all_url)
     {
-      console.log(`🕵️‍♀️  browsing ${dedicatedbrand_url+`?p=${page}`} source`);
-      products = await dedicatedbrand.scrape(dedicatedbrand_url+`?p=${page}`);
-      console.log('done');
-      if (products.length != 0) products.forEach(product => all_products.push(product));
-      page++;
+      let page = 1;
+      let products = [];
+      let done = false;
+
+      do
+      {
+        console.log(`🕵️‍♀️  browsing ${url+`?p=${page}`} source`);
+        products = await all_packages[url].scrape(url+`?p=${page}`);
+        console.log('done');
+        if ((products.length != 0) && ((all_products.length == 0) || (products[products.length-1].name != all_products[all_products.length-1].name))) products.forEach(product => all_products.push(product));
+        else done = true;
+        page++;
+      }
+      while /*(page < 2)*/(!done);
     }
-    while (products.length != 0);
+    
     console.log(all_products);
     
     process.exit(0);
