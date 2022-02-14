@@ -50,7 +50,7 @@ async function sandbox () {
 
     for (let i = 0; i<all_products.length; i++)
     {
-      if (all_products[i].name == undefined)
+      if (all_products[i].name == undefined || all_products[i].name == '')
       {
         all_products.splice(i, 1);
         i--;
