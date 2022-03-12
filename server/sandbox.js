@@ -16,6 +16,8 @@ all_packages[dedicatedbrand_url] = dedicatedbrand;
 all_packages[montlimart_url] = montlimart;
 all_packages[adresse_url] = adresse;
 
+let id_product = 0;
+
 async function sandbox () {
   try {
     for (const url of all_url)
@@ -40,7 +42,11 @@ async function sandbox () {
           ((all_products.length == 0) || 
           ((products[products.length-1].name != all_products[all_products.length-1].name) && 
           (all_products.length <= actual_all_products_length+1 || products[1].name != all_products[actual_all_products_length+1].name)))) 
-            products.forEach(product => all_products.push(product));
+            products.forEach(product => {
+              product["_id"] = id_product;
+              id_product++;
+              all_products.push(product);
+            });
           else done = true;
           page++;
         }
