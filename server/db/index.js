@@ -74,6 +74,25 @@ module.exports.find = async query => {
 };
 
 /**
+ * Find products based on query with limit
+ * @param  {Array}  query
+ * @param   {int}   limit 
+ * @return {Array}
+ */
+ module.exports.find_limit = async (query, limit) => {
+  try {
+    const db = await getDB();
+    const collection = db.collection(MONGODB_COLLECTION);
+    const result = await collection.find(query).limit(limit).toArray();
+
+    return result;
+  } catch (error) {
+    console.error('🚨 collection.find...', error);
+    return null;
+  }
+};
+
+/**
  * Close the connection
  */
 module.exports.close = async () => {
