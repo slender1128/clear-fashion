@@ -6,7 +6,7 @@ require('dotenv').config();
 const {MongoClient} = require('mongodb');
 const db = require('./db');
 
-//const PORT = 8092;
+const PORT = 8092;
 
 const app = express();
 
@@ -46,9 +46,9 @@ app.get('/products/:id', async (request, response) => {
   const product = await db.find({'_id' : id});
   response.status(200).json({'result' : product});
 });
-/*
+
 app.listen(PORT);
 
 console.log(`📡 Running on port ${PORT}`);
-*/
+
 module.exports = app;
