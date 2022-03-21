@@ -10,8 +10,6 @@ const db = require('./db');
 
 const app = express();
 
-module.exports = app;
-
 app.use(require('body-parser').json());
 app.use(cors());
 app.use(helmet());
@@ -53,3 +51,4 @@ app.listen(PORT);
 
 console.log(`📡 Running on port ${PORT}`);
 */
+module.exports = app;
