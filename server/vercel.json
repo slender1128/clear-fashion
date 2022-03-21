@@ -1,7 +1,9 @@
 {
   "version": 2,
-  "builds": [{"src": "api.js", "use": "@vercel/node"}],
+  "builds": [{"src": "*.js", "use": "@vercel/node"}],
   "routes": [
-    {"src": "/(.*)", "dest": "api.js"}
+    {"src": "/", "dest": "api.js"},
+    {"src": "/products/search", "dest": "api.js/products/search"},
+    {"src": "/products/(?<id>[^/]*)", "dest": "api.js/products/:id"}
   ]
 }
