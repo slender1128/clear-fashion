@@ -1,7 +1,9 @@
 {
   "version": 2,
   "builds": [{"src": "api.js", "use": "@vercel/node"}],
-  "routes": [
-    {"src": "/(.*)", "dest": "/api.js"}
+  "rewrites": [
+    {"source": "/", "destination": "api.js"},
+    {"source": "/products/:id", "destination": "api.js/products/:id"},
+    {"source": "/products/search", "destination": "api.js/products/search"}
   ]
 }
