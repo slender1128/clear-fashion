@@ -3,6 +3,7 @@
   "builds": [{"src": "*.js", "use": "@now/node"}],
   "routes": [
     {"src": "/", "dest": "api.js"},
-    {"src": "/products/(.*)", "dest": "api-products-id.js"}
+    {"src": "/products/search(.*)", "dest": "api.js"},
+    {"src": "/products/(.*)", "dest": "api.js"}
   ]
 }
