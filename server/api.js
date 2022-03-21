@@ -1,5 +1,5 @@
 const cors = require('cors');
-const express = require('express');
+const express = require('express').Router();
 const req = require('express/lib/request');
 const helmet = require('helmet');
 require('dotenv').config();
