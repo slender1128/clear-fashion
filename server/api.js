@@ -48,7 +48,8 @@ app.get('/products/:id', async (request, response) => {
   const product = await db.find({'_id' : id});
   response.status(200).json({'result' : product});
 });
-
+/*
 app.listen(PORT);
 
 console.log(`📡 Running on port ${PORT}`);
+*/
