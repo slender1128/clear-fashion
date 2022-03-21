@@ -2,7 +2,6 @@
   "version": 2,
   "builds": [{"src": "*.js", "use": "@now/node"}],
   "routes": [
-    {"src": "/", "dest": "api.js"},
-    {"src": "/products", "dest": "api.js/products"}
+    {"src": "/products/(.*)", "dest": "api.js"}
   ]
 }
