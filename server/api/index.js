@@ -6,7 +6,7 @@ require('dotenv').config();
 const {MongoClient} = require('mongodb');
 const db = require('./db');
 
-const PORT = 8092;
+//const PORT = 8092;
 
 const app = express();
 
