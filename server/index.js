@@ -1,14 +1,9 @@
-const express = require('express');
-const root = require("./api/root");
-const search = require("./api/search");
-const products_id = require("./api/products_id");
+const parseDomain = require('parse-domain');
+const sources = require('require-all')(`${__dirname}/sources`);
 
-const app = express();
+module.exports = async link => {
+  const {'domain': source} = parseDomain(link);
+  const products = await sources[source].scrape(link);
 
-const PORT = process.env.PORT || 8092;
-
-app.use('/', root);
-app.use('/products/search', search);
-app.use('/products/:id', products_id);
-
-app.listen(PORT, () => console.log(`Server is running in port ${PORT}`));
+  return products;
+};
