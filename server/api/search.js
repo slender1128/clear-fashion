@@ -58,9 +58,8 @@ router.get('/', async (request, response) => {
 
     //Setting the output
     const product = await db.find(db_request, limit, offset, sort);
-    const total = await db.count();
-    const {currentPage, pageCount, pageSize, count} = paginate(page, total, product);
-    response.status(200).json({'currentPage' : currentPage, 'pageCount' : pageCount, 'pageSize' : pageSize, 'count' : count, 'result' : product});
+    const total = await db.count(db_request);
+    response.status(200).json({'currentPage' : page, 'pageCount' : Math.ceil(total/size), 'pageSize' : product.length, 'count' : total, 'result' : product});
 });
 
 module.exports = router;
