@@ -4,7 +4,7 @@ const search = require("./api/search");
 
 const app = express();
 
-const PORT = process.env.PORT || 27017;
+const PORT = process.env.PORT || 8092;
 
 app.use('/', root);
 app.use('/products/search', search);
