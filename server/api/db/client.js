@@ -10,6 +10,6 @@ const getDB = async () => {
     return database;
 }
 
-const db = getDB();
+const db = await getDB();
 
 module.exports = db;
