@@ -59,7 +59,7 @@ const getDB = module.exports.getDB = async () => {
   try {
     const db = await getDB();
     const collection = db.collection(MONGODB_COLLECTION);
-    const result = await collection.count().toArray();
+    const result = await collection.find({}).count().toArray();
 
     return result;
   } catch (error) {
