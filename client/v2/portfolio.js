@@ -138,7 +138,7 @@ const setAllLists = ({result, meta}) => {
 const fetchProducts = async (size = 12) => {
 	try {
 		const response = await fetch(
-			`https://clear-fashion-api.vercel.app?size=${size}`
+			`https://jbr-clear-fashion-server.vercel.app/products/search?size=${size}`
 		);
 		const body = await response.json();
 
