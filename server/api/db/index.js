@@ -34,13 +34,15 @@ const getDB = module.exports.getDB = async () => {
 /**
  * Find products based on query
  * @param  {Array}  query
+ * @param   {int}   limit
+ * @param   {int}   offset
  * @return {Array}
  */
-module.exports.find = async query => {
+ module.exports.find = async (query, limit, offset, sort) => {
   try {
     const db = await getDB();
     const collection = db.collection(MONGODB_COLLECTION);
-    const result = await collection.find(query).toArray();
+    const result = await collection.find(query).sort(sort).skip(offset).limit(limit).toArray();
 
     return result;
   } catch (error) {
@@ -50,16 +52,14 @@ module.exports.find = async query => {
 };
 
 /**
- * Find products based on query with limit
- * @param  {Array}  query
- * @param   {int}   limit 
+ * Count total products
  * @return {Array}
  */
- module.exports.find_limit = async (query, limit) => {
+ module.exports.count = async () => {
   try {
     const db = await getDB();
     const collection = db.collection(MONGODB_COLLECTION);
-    const result = await collection.find(query).limit(limit).toArray();
+    const result = await collection.count().toArray();
 
     return result;
   } catch (error) {
