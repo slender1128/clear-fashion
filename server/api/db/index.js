@@ -1,6 +1,5 @@
 require('dotenv').config();
 const {MongoClient} = require('mongodb');
-const fs = require('fs');
 
 const MONGODB_DB_NAME = 'clearfashion';
 const MONGODB_COLLECTION = 'products';
@@ -29,29 +28,6 @@ const getDB = module.exports.getDB = async () => {
   } catch (error) {
     console.error('🚨 MongoClient.connect...', error);
     return null;
-  }
-};
-
-/**
- * Insert list of products
- * @param  {Array}  products
- * @return {Object}
- */
-module.exports.insert = async products => {
-  try {
-    const db = await getDB();
-    const collection = db.collection(MONGODB_COLLECTION);
-    // More details
-    // https://docs.mongodb.com/manual/reference/method/db.collection.insertMany/#insert-several-document-specifying-an-id-field
-    const result = await collection.insertMany(products, {'ordered': false});
-
-    return result;
-  } catch (error) {
-    console.error('🚨 collection.insertMany...', error);
-    fs.writeFileSync('products.json', JSON.stringify(products));
-    return {
-      'insertedCount': error.result.nInserted
-    };
   }
 };
 
