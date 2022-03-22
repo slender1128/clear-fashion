@@ -14,6 +14,7 @@ router.use(helmet());
 router.options('*', cors());
 
 router.get('/', async (request, response) => {
+    /*
     let limit;
     if (request.query.limit == undefined) limit = 12;
     else limit = parseInt(request.query.limit);
@@ -31,7 +32,9 @@ router.get('/', async (request, response) => {
     if (price >= 0) db_request['price'] = {'$lte' : price};
 
     const product = await db.find_limit(db_request, limit);
-    response.send({'limit' : limit, 'total' : product.length, 'result' : product});
+    response.status(200).json({'limit' : limit, 'total' : product.length, 'result' : product});
+    */
+   response.status(200).json({"result": request.query.limit});
 });
 
 module.exports = router;
