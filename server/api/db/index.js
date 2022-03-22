@@ -3,7 +3,7 @@ const {MongoClient} = require('mongodb');
 
 const MONGODB_DB_NAME = 'clearfashion';
 const MONGODB_COLLECTION = 'products';
-const MONGODB_URI = 'mongodb+srv://slender1128:a4b3c2d1@clearfashion.5edrj.mongodb.net/clearfashion?retryWrites=true&w=majority&socketTimeoutMS=90000';
+const MONGODB_URI = 'mongodb+srv://slender1128:a4b3c2d1@clearfashion.5edrj.mongodb.net/clearfashion?retryWrites=true&w=majority';
 
 let client = null;
 let database = null;
@@ -19,7 +19,7 @@ const getDB = module.exports.getDB = async () => {
       return database;
     }
 
-    client = await MongoClient.connect(MONGODB_URI, {'useUnifiedTopology' : true, 'useNewUrlParser': true});
+    client = await MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true});
     database = client.db(MONGODB_DB_NAME);
 
     console.log('💽  Connected');
