@@ -16,7 +16,7 @@ router.options('*', cors());
 router.get('/', async (request, response) => {
   const id = parseInt(request.params.id);
   const product = await db.find({'_id' : id});
-  response.status(200).json({'result' : product});
+  response.send({'result' : product});
 });
 
 module.exports = router;
