@@ -2,6 +2,8 @@ require('dotenv').config();
 const {MongoClient} = require('mongodb');
 const db = require('./client.js');
 
+const MONGODB_COLLECTION = 'products';
+
 /**
  * Find products based on query
  * @param  {Array}  query
