@@ -19,7 +19,7 @@ const getDB = module.exports.getDB = async () => {
       return database;
     }
 
-    client = await MongoClient.connect(MONGODB_URI, {'useNewUrlParser': true});
+    client = await MongoClient.connect(MONGODB_URI, {'useUnifiedTopology' : true, 'useNewUrlParser': true});
     database = client.db(MONGODB_DB_NAME);
 
     console.log('💽  Connected');
@@ -58,7 +58,6 @@ module.exports.find = async query => {
  module.exports.find_limit = async (query, limit) => {
   try {
     const db = await getDB();
-    return ["mange", "tes", "morts"];
     const collection = db.collection(MONGODB_COLLECTION);
     const result = await collection.find(query).limit(limit).toArray();
 
