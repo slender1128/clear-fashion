@@ -34,7 +34,7 @@ router.get('/', async (request, response) => {
 
     //Filter by price
     let price;
-    if (request.query.price == undefined || request.query.price == 'all') price = -1;
+    if (request.query.price == undefined) price = -1;
     else price = parseFloat(request.query.price);
 
     //Sort
